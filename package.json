@@ -1,9 +1,9 @@
 {
-  "name": "active-expressions",
-  "version": "1.5.1",
+  "name": "aexpr-interpretation",
+  "version": "1.0.0",
   "description": " Monitor expressions over the execution of a program",
-  "main": "dist/active-expressions.js",
-  "jsnext:main": "src/active-expressions.js",
+  "main": "dist/aexpr-interpretation.js",
+  "jsnext:main": "src/aexpr-interpretation.js",
   "directories": {
     "test": "tests"
   },
@@ -90,6 +90,7 @@
     "webpack-config": "^5.2.1"
   },
   "dependencies": {
+    "active-expressions": "^1.5.1",
     "babel-plugin-locals": "^1.0.1",
     "stack-es2015-modules": "^1.1.0"
   }
