@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/onsetsu/active-expressions.git"
+    "url": "git+https://github.com/active-expressions/aexpr-interpretation.git"
   },
   "keywords": [
     "Active",
@@ -30,13 +30,13 @@
   "author": {
     "name": "Stefan Ramson",
     "email": "stefan.ramson@gmail.com",
-    "url": "http://onsetsu.github.io/"
+    "url": "http://active-expressions.github.io/"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/onsetsu/active-expressions/issues"
+    "url": "https://github.com/active-expressions/aexpr-interpretation/issues"
   },
-  "homepage": "https://github.com/onsetsu/active-expressions#readme",
+  "homepage": "https://github.com/active-expressions/aexpr-interpretation#readme",
   "devDependencies": {
     "babel-core": "^6.7.7",
     "babel-loader": "^6.2.4",
