@@ -251,6 +251,71 @@ describe('Interpreting Active Expressions', function() {
         expect(spy.calledOnce).to.be.true;
     });
 
+    describe('parametrizable aexprs', () => {
+
+        it('handles a single instance binding', () => {
+            let obj = { val: 17 },
+                spy = sinon.spy();
+
+            aexpr(o => o.val, locals, obj).onChange(spy);
+
+            expect(spy).not.to.be.called;
+
+            obj.val = 42;
+
+            expect(spy).to.be.calledOnce;
+        });
+
+        it("handle aexprs with one instance binding with multiple variables", () => {
+            let obj1 = { val: 1 },
+                obj2 = { val: 2 },
+                obj3 = { val: 3 },
+                spy = sinon.spy();
+
+            aexpr((o1, o2, o3) => o1.val + o2.val + o3.val, locals, obj1, obj2, obj3).onChange(spy);
+
+            expect(spy).not.to.be.called;
+
+            obj1.val = 10;
+
+            expect(spy.withArgs(15)).to.be.calledOnce;
+
+            obj2.val = 20;
+
+            expect(spy.withArgs(33)).to.be.calledOnce;
+        });
+
+        it("handle aexprs with multiple instance bindings", () => {
+            let obj1 = { val: 1 },
+                obj2 = { val: 2 },
+                obj3 = { val: 3 },
+                spy12 = sinon.spy(),
+                spy23 = sinon.spy(),
+                expr = (o1, o2) => o1.val + o2.val;
+
+            aexpr(expr, locals, obj1, obj2).onChange(spy12);
+            aexpr(expr, locals, obj2, obj3).onChange(spy23);
+
+            expect(spy12).not.to.be.called;
+            expect(spy23).not.to.be.called;
+
+            obj1.val = 10;
+
+            expect(spy12.withArgs(12)).to.be.calledOnce;
+            expect(spy23).not.to.be.called;
+
+            obj2.val = 20;
+
+            expect(spy12.withArgs(30)).to.be.calledOnce;
+            expect(spy23.withArgs(23)).to.be.calledOnce;
+
+            obj3.val = 30;
+
+            expect(spy12.withArgs(30)).to.be.calledOnce;
+            expect(spy23.withArgs(50)).to.be.calledOnce;
+        });
+    });
+
     describe('Dealing With Globals', function() {
 
         it("access Math object", () => {

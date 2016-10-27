@@ -13,8 +13,8 @@ class Handler {
 
 class InterpreterActiveExpression extends BaseActiveExpression {
 
-    constructor(func, scope) {
-        super(func);
+    constructor(func, scope, ...params) {
+        super(func, ...params);
         this.scope = scope;
         this.propertyAccessors = new Set();
 
@@ -32,7 +32,7 @@ class InterpreterActiveExpression extends BaseActiveExpression {
 
     installListeners() {
         AEXPR_STACK.withElement(this, () => {
-            ActiveExpressionInterpreter.runAndReturn(this.func, this.scope);
+            ActiveExpressionInterpreter.runAndReturn(this.func, this.scope, ...(this.params));
         });
     }
 
@@ -44,14 +44,19 @@ class InterpreterActiveExpression extends BaseActiveExpression {
     }
 }
 
-export function aexpr(func, scope) { return new InterpreterActiveExpression(func, scope); }
+export function aexpr(func, scope, ...params) { return new InterpreterActiveExpression(func, scope, ...params); }
 
 export class ActiveExpressionInterpreter extends Interpreter {
 
-    static runAndReturn(func, optScope) {
+    static runAndReturn(func, optScope, ...params) {
+        function argumentNameForIndex(key) {
+            return 'arg' + key;
+        }
+
         var scope = optScope || {};
+        console.log(`var returnValue = (${func.toString()})();`);
         var i = new ActiveExpressionInterpreter(
-            `var returnValue = (${func.toString()})();`,
+            `var returnValue = (${func.toString()})(${params.map((value, key) => argumentNameForIndex(key)).join(', ')});`, // TODO: add arg1 explicitly to the scope!
             (self, rootScope) => {
                 //console.log('scope', scope);
                 Object.keys(scope).forEach((k) => {
@@ -63,6 +68,13 @@ export class ActiveExpressionInterpreter extends Interpreter {
                 // ["__lvVarRecorder", "jQuery", "$", "_", "lively"].forEach((k) => {
                 //     self.setProperty(rootScope, k, self.createPseudoObject(window[k]));
                 // });
+
+                // TODO: finish this
+                params.forEach((value, key) => {
+                    let name = 'arg' + key;
+                    console.log(name, value);
+                    self.setProperty(rootScope, name, self.createPseudoObject(value));
+                });
             });
         i.run();
         return i.stateStack[0].scope.properties.returnValue.valueOf();
