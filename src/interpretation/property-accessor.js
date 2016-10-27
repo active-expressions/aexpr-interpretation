@@ -20,7 +20,7 @@ export class PropertyAccessor {
 
         obj.__defineSetter__(propName, (function(newValue) {
             var returnValue = this[PROPERTY_ACCESSOR_NAME] = newValue;
-            console.log('newValue for', obj, propName, newValue);
+            //console.log('newValue for', obj, propName, newValue);
             this.setPropertyWith(newValue);
             return returnValue;
         }).bind(this));

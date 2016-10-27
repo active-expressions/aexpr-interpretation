@@ -48,15 +48,13 @@ export function aexpr(func, scope, ...params) { return new InterpreterActiveExpr
 
 export class ActiveExpressionInterpreter extends Interpreter {
 
-    static runAndReturn(func, optScope, ...params) {
+    static runAndReturn(func, scope = {}, ...params) {
         function argumentNameForIndex(key) {
-            return 'arg' + key;
+            return '__arg__' + key;
         }
 
-        var scope = optScope || {};
-        console.log(`var returnValue = (${func.toString()})();`);
         var i = new ActiveExpressionInterpreter(
-            `var returnValue = (${func.toString()})(${params.map((value, key) => argumentNameForIndex(key)).join(', ')});`, // TODO: add arg1 explicitly to the scope!
+            `var returnValue = (${func.toString()})(${params.map((value, key) => argumentNameForIndex(key)).join(', ')});`,
             (self, rootScope) => {
                 //console.log('scope', scope);
                 Object.keys(scope).forEach((k) => {
@@ -69,10 +67,8 @@ export class ActiveExpressionInterpreter extends Interpreter {
                 //     self.setProperty(rootScope, k, self.createPseudoObject(window[k]));
                 // });
 
-                // TODO: finish this
                 params.forEach((value, key) => {
-                    let name = 'arg' + key;
-                    console.log(name, value);
+                    let name = argumentNameForIndex(key);
                     self.setProperty(rootScope, name, self.createPseudoObject(value));
                 });
             });
