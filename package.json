@@ -1,6 +1,6 @@
 {
   "name": "aexpr-interpretation",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": " Monitor expressions over the execution of a program",
   "main": "dist/aexpr-interpretation.js",
   "jsnext:main": "src/aexpr-interpretation.js",
